@@ -1,0 +1,69 @@
+<app-loading *ngIf="loading; else content"></app-loading>
+
+<ng-template #content>
+  <div *ngIf="errorMessage" class="row">
+    <div class="mx-auto mt-3">
+      <h3 class="text-danger">
+        {{ errorMessage }}
+      </h3>
+    </div>
+  </div>
+
+  <div *ngIf="!errorMessage" class="row justify-content-center">
+    <table class="table table-hover mt-3 mb-5">
+      <thead class="thead-dark">
+        <tr>
+          <th style="width: 60%" scope="col">
+            <span style="cursor: pointer" (click)="onSort('title')">Title</span>
+            <span
+              *ngIf="currentSort.col === 'title' && currentSort.dir"
+              [ngClass]="{ rotated: currentSort.dir === 'desc' }"
+              class="arrow"
+              >&darr;</span
+            >
+          </th>
+          <th style="width: 20%" scope="col">
+            <span style="cursor: pointer" (click)="onSort('year')">Year</span>
+            <span
+              *ngIf="currentSort.col === 'year' && currentSort.dir"
+              [ngClass]="{ rotated: currentSort.dir === 'desc' }"
+              class="arrow"
+              >&darr;</span
+            >
+          </th>
+          <th style="width: 20%" scope="col">
+            <span style="cursor: pointer" (click)="onSort('type')">Type</span>
+            <span
+              *ngIf="currentSort.col === 'type' && currentSort.dir"
+              [ngClass]="{ rotated: currentSort.dir === 'desc' }"
+              class="arrow"
+              >&darr;</span
+            >
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          *ngFor="let movie of sortedMovies"
+          (click)="onMovieClick(movie.id)"
+          style="cursor: pointer"
+        >
+          <td>
+            {{ movie.title }}
+          </td>
+          <td>{{ movie.year }}</td>
+          <td>{{ movie.type }}</td>
+        </tr>
+      </tbody>
+    </table>
+    <ngb-pagination
+      [collectionSize]="totalMovies"
+      [(page)]="carrentPage"
+      [maxSize]="5"
+      [rotate]="true"
+      [ellipses]="false"
+      [boundaryLinks]="true"
+      (pageChange)="onPageChange($event)"
+    ></ngb-pagination>
+  </div>
+</ng-template>
